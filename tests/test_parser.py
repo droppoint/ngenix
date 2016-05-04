@@ -9,7 +9,7 @@ from ngenix_demo_task.parser import (
     parse_xml_file, render_objects_csv, render_vars_csv)
 
 TESTS_DIR = os.path.dirname(__file__)
-DATA_DIR = os.path.join(TESTS_DIR, "data")
+DATA_DIR = os.path.join(TESTS_DIR, 'data')
 
 
 class TestParseXMLFile:
@@ -109,12 +109,12 @@ class TestRenderVarsCSV:
         control = os.path.join(DATA_DIR, 'vars.csv')
         assert filecmp.cmp(test_csv, control)
 
-    @mock.patch("ngenix_demo_task.parser.open")
+    @mock.patch('ngenix_demo_task.parser.open')
     def test_system_error(self, open_mock, tmpdir):
         '''возвращает ошибку ParserError, если при записи csv файла возникла
         системная ошибка.
         '''
-        open_mock.side_effect = IOError("Test")
+        open_mock.side_effect = IOError('Test')
         path = str(tmpdir.mkdir('csv'))
         vars = [('hello', '42'), ('world', '42')]
         with pytest.raises(ParserError) as excinfo:
@@ -134,12 +134,12 @@ class TestRenderObjectsCSV:
         control = os.path.join(DATA_DIR, 'objects.csv')
         assert filecmp.cmp(test_csv, control)
 
-    @mock.patch("ngenix_demo_task.parser.open")
+    @mock.patch('ngenix_demo_task.parser.open')
     def test_system_error(self, open_mock, tmpdir):
         '''возвращает ошибку ParserError, если при записи csv файла возникла
         системная ошибка.
         '''
-        open_mock.side_effect = IOError("Test")
+        open_mock.side_effect = IOError('Test')
         path = str(tmpdir.mkdir('csv'))
         objects = [('hello', '42'), ('world', '42')]
         with pytest.raises(ParserError) as excinfo:
@@ -150,8 +150,8 @@ class TestRenderObjectsCSV:
 class TestDoTaskTwo:
     '''do_task_two'''
 
-    @mock.patch("ngenix_demo_task.parser.render_vars_csv")
-    @mock.patch("ngenix_demo_task.parser.render_objects_csv")
+    @mock.patch('ngenix_demo_task.parser.render_vars_csv')
+    @mock.patch('ngenix_demo_task.parser.render_objects_csv')
     def test_ok(self, objects_mock, vars_mock):
         '''обрабатывает содержимое папки с zip архивами согласно заданию №2.'''
         path = os.path.join(DATA_DIR, 'good')

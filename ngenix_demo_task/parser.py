@@ -31,38 +31,38 @@ def parse_xml_file(xml_file):
     :raises: XMLParserError.
     '''
     result = {
-        "vars": [],
-        "objects": []
+        'vars': [],
+        'objects': []
     }
     try:
         tree = etree.parse(xml_file)
     except etree.XMLSyntaxError:
-        raise XMLParserError("XML file {} is corrupted".format(xml_file.name))
+        raise XMLParserError('XML file {} is corrupted'.format(xml_file.name))
     var_id_list = tree.xpath('/root/var[@name="id"]')
     if len(var_id_list) == 0:
-        raise XMLParserError("XML document has no var element of type id")
+        raise XMLParserError('XML document has no var element of type id')
     if len(var_id_list) > 1:
-        message = "XML document has multiple var elements of type id"
+        message = 'XML document has multiple var elements of type id'
         raise XMLParserError(message)
     var_level_list = tree.xpath('/root/var[@name="level"]')
     if len(var_level_list) == 0:
-        raise XMLParserError("XML document has no var element of type level")
+        raise XMLParserError('XML document has no var element of type level')
     if len(var_level_list) > 1:
-        message = "XML document has multiple var elements of type level"
+        message = 'XML document has multiple var elements of type level'
         raise XMLParserError(message)
     var_id, var_level = var_id_list[0], var_level_list[0]
-    id, level = var_id.attrib["value"], var_level.attrib["value"]
-    result["vars"].append((id, level))
+    id, level = var_id.attrib['value'], var_level.attrib['value']
+    result['vars'].append((id, level))
     xobjects = tree.xpath('/root/objects/object')
     if len(xobjects) == 0:
-        message = "XML document has no elements of type object"
+        message = 'XML document has no elements of type object'
         raise XMLParserError(message)
     if len(xobjects) > 10:
-        message = "XML document has more than ten elements of type object"
+        message = 'XML document has more than ten elements of type object'
         raise XMLParserError(message)
     for xobject in xobjects:
-        name = xobject.attrib["name"]
-        result["objects"].append((id, name))
+        name = xobject.attrib['name']
+        result['objects'].append((id, name))
     return result
 
 
@@ -73,20 +73,20 @@ def parse_archive(path):
     :raises: ZIPParserError.
     '''
     result = {
-        "vars": [],
-        "objects": []
+        'vars': [],
+        'objects': []
     }
     try:
         with ZipFile(path, 'r') as archive:
             files = archive.namelist()
             for file in files:
                 assert '.xml' in file, 'archive must contain only xml files'
-                with archive.open(file, "r") as xml_file:
+                with archive.open(file, 'r') as xml_file:
                     diff = parse_xml_file(xml_file)
                     result['vars'] += diff['vars']
                     result['objects'] += diff['objects']
     except (BadZipFile, AssertionError):
-        raise ZIPParserError("ZIP file {} is corrupted".format(path))
+        raise ZIPParserError('ZIP file {} is corrupted'.format(path))
     return result
 
 
@@ -98,10 +98,10 @@ def render_vars_csv(path, vars):
 
     '''
     try:
-        vars_path = os.path.join(path, "vars.csv")
+        vars_path = os.path.join(path, 'vars.csv')
         with open(vars_path, 'w') as csvfile:
             csvwriter = csv.writer(csvfile)
-            csvwriter.writerow(("id", "level"))
+            csvwriter.writerow(('id', 'level'))
             for line in vars:
                 csvwriter.writerow(line)
     except IOError as error:
@@ -116,10 +116,10 @@ def render_objects_csv(path, objects):
 
     '''
     try:
-        objects_path = os.path.join(path, "objects.csv")
+        objects_path = os.path.join(path, 'objects.csv')
         with open(objects_path, 'w') as csvfile:
             csvwriter = csv.writer(csvfile)
-            csvwriter.writerow(("id", "object_name"))
+            csvwriter.writerow(('id', 'object_name'))
             for line in objects:
                 csvwriter.writerow(line)
     except IOError as error:
@@ -135,7 +135,7 @@ def do_task_two(path):
     '''
     archive_paths = []
     for filename in os.listdir(path):
-        if filename.endswith(".zip"):
+        if filename.endswith('.zip'):
             archive_paths.append(os.path.join(path, filename))
     if len(archive_paths) == 0:
         raise ParserError('No zip files found in folder {}'.format(path))

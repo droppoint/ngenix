@@ -9,7 +9,7 @@ from ngenix_demo_task.generator import (
     generate_zip, render_xml)
 
 TESTS_DIR = os.path.dirname(__file__)
-DATA_DIR = os.path.join(TESTS_DIR, "data")
+DATA_DIR = os.path.join(TESTS_DIR, 'data')
 
 
 class TestGenerateData:
@@ -36,11 +36,11 @@ class TestRenderXML:
     def data(self):
         '''Фикстура данных для генерации контрольного xml документа.'''
         objects = [
-            "one",
-            "two",
-            "three"
+            'one',
+            'two',
+            'three'
         ]
-        return ("helloworld", 42, objects)
+        return ('helloworld', 42, objects)
 
     @pytest.fixture
     def document(self):
@@ -62,7 +62,7 @@ class TestRenderXML:
         '''возвращает ошибку ValueError в случае, если в качестве параметра
         objects передан пустой итерируемый объект.
         '''
-        data = ("helloworld", 42, [])
+        data = ('helloworld', 42, [])
         with pytest.raises(XMLGeneratorError) as excinfo:
             render_xml(*data)
         assert str(excinfo.value) == 'Document must have at least one object'
@@ -75,11 +75,11 @@ class TestGenerateZIP:
     def data(self):
         '''Фикстура данных для генерации контрольного xml документа.'''
         objects = [
-            "one",
-            "two",
-            "three"
+            'one',
+            'two',
+            'three'
         ]
-        return ("helloworld", 42, objects)
+        return ('helloworld', 42, objects)
 
     @pytest.fixture
     def document(self):
@@ -91,7 +91,7 @@ class TestGenerateZIP:
         )
         return document
 
-    @mock.patch("ngenix_demo_task.generator.generate_data")
+    @mock.patch('ngenix_demo_task.generator.generate_data')
     def test_ok(self, data_mock, tmpdir, data, document):
         '''генерирует валидный zip архив с данными полученными из
         generate_data.
@@ -108,12 +108,12 @@ class TestGenerateZIP:
         for info_a, info_b in zip(test_info, control_info):
             assert info_a.CRC == info_b.CRC
 
-    @mock.patch("ngenix_demo_task.generator.ZipFile")
+    @mock.patch('ngenix_demo_task.generator.ZipFile')
     def test_system_error(self, zip_mock, tmpdir):
         '''возвращает ошибку GeneratorError, если при записи zip файла возникла
         системная ошибка.
         '''
-        zip_mock.side_effect = IOError("Test")
+        zip_mock.side_effect = IOError('Test')
         path = str(tmpdir.mkdir('archives').join('test.zip'))
         with pytest.raises(GeneratorError) as excinfo:
             generate_zip(path, xml_documents_quantity=2)
@@ -123,7 +123,7 @@ class TestGenerateZIP:
 class TestDoTaskOne:
     '''do_task_one'''
 
-    @mock.patch("ngenix_demo_task.generator.generate_zip")
+    @mock.patch('ngenix_demo_task.generator.generate_zip')
     def test_ok(self, zip_mock, tmpdir):
         '''вызывает generate_zip для генерации zip архивов в указанной локации.
         '''
