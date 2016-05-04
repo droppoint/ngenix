@@ -15,7 +15,7 @@ install_requires = [
 
 setup(
     name='ngenix-demo-task',
-    version='0.1.0',
+    version='1.0.0',
 
     description='Реализация тестового задания для компании Ngenix',
     long_description=__doc__,
